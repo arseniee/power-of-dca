@@ -49,7 +49,7 @@ def calculate_dca_metrics(start_date, end_date, stock_data, monthly_investment):
         
         max_drawdown = dca_df['Drawdown'].min()
         monthly_returns = dca_df['PortfolioValue'].pct_change().dropna()
-        volatility = monthly_returns.std() * np.sqrt(12) if len(monthly_returns) > 1 else 0
+        volatility = monthly_returns.std() if len(monthly_returns) > 1 else 0
         sharpe_ratio = annualized_return / volatility if volatility > 0 else 0
 
         # 6. Renvoyer les métriques et le DataFrame unifié
