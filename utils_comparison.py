@@ -48,6 +48,7 @@ def display_strategy_comparison(res1, res2, name1, name2):
     avec des onglets, des graphiques avancés et des tests statistiques.
     """
     st.header(f"⚖️ Comparaison Détaillée : {name1} vs. {name2}")
+    st.markdown("On compare ici la perfomance de 2 investissment sur différentes périodes de temps")
 
     if res1 is None or res2 is None or res1.empty or res2.empty:
         st.error("Les données de comparaison sont manquantes ou incomplètes.")
@@ -79,14 +80,14 @@ def display_strategy_comparison(res1, res2, name1, name2):
     mean_return_2 = res2_clean['annualized_return'].mean()
     std_dev_1 = res1_clean['annualized_return'].std()
     std_dev_2 = res2_clean['annualized_return'].std()
-    sharpe_1 = mean_return_1 / std_dev_1 if std_dev_1 > 0 else 0
-    sharpe_2 = mean_return_2 / std_dev_2 if std_dev_2 > 0 else 0
+    sharpe_1 = (mean_return_1 - 2/100) / std_dev_1 if std_dev_1 > 0 else 0
+    sharpe_2 = (mean_return_2 - 2/100) / std_dev_2 if std_dev_2 > 0 else 0
     win_rate_1 = (res1_clean['final_value'] > res2_clean['final_value']).sum() / len(res1_clean) * 100
     
     col1.metric("Rdt Ann. Moyen", f"{mean_return_1:.1f}%", f"{mean_return_1 - mean_return_2:.1f}% vs {name2}")
     col2.metric("Volatilité Ann.", f"{std_dev_1:.1f}%", f"{std_dev_1 - std_dev_2:.1f}% vs {name2}")
     col3.metric(f"Taux de Victoire ({name1})", f"{win_rate_1:.1f}%", help=f"Pourcentage de périodes où {name1} a surperformé {name2}.")
-    col4.metric("Ratio de Sharpe", f"{sharpe_1:.2f}", f"{sharpe_1 - sharpe_2:.2f} vs {name2}")
+    col4.metric("Ratio de Sharpe", f"{sharpe_1:.2f}", f"{sharpe_1 - sharpe_2:.2f} vs {name2}", help=f"(Rendment annuel moyen de {name1} - taux sans risque (2%)) / volatilité de {name1}")
 
     st.markdown("---")
 
